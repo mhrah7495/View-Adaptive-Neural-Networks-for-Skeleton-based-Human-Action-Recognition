@@ -8,6 +8,7 @@ import h5py
 import os.path as osp
 import sys
 import scipy.misc
+import cv2
 if sys.version_info[0] == 2:
     import cPickle as pickle
 else:
@@ -87,7 +88,7 @@ class NTUDataLoaders(object):
             #### original rescale to 0-255
             ske_joint =  255 * (ske_joint - min_val) / (max_val - min_val)
             rgb_ske = np.reshape(ske_joint, (ske_joint.shape[0], ske_joint.shape[1] //3, 3))
-            rgb_ske = scipy.misc.imresize(rgb_ske, (224, 224)).astype(np.float32)
+            rgb_ske = cv2.resize(rgb_ske, (224, 224)).astype(np.float32)
             rgb_ske = center(rgb_ske)
             rgb_ske = np.transpose(rgb_ske, [1, 0, 2])
             rgb_ske = np.transpose(rgb_ske, [2,1,0])
