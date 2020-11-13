@@ -22,8 +22,8 @@ def load_NTU(case):
 
     if case == 0:
         filename = os.path.join('./data/ntu', 'NTU_CS.h5')
-    else:
-        filename = os.path.join('./data/NTU', 'NTU_CV.h5')
+    #else:
+    #    filename = os.path.join('./data/NTU', 'NTU_CV.h5')
 
     train_x, train_y, valid_x, valid_y, test_x, test_y = loaddata(filename)
     return train_x, train_y, valid_x, valid_y, test_x, test_y
