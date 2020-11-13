@@ -118,7 +118,7 @@ if __name__ == '__main__':
     rootdir = os.path.join('./results/VA-RNN', args.dataset, args.model)
     cases = get_cases(args.dataset)
 
-    for case in range(cases):
-        args.case = case
-        main(rootdir, args.case, results)
+    #for case in range(cases):
+    args.case = 0 #only CS
+    main(rootdir, args.case, results)
     np.savetxt(rootdir + '/resuult.txt', results, fmt = '%f')
