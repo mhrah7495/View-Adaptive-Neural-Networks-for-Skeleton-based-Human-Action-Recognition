@@ -231,6 +231,7 @@ if __name__ == '__main__':
 
     skes_joints = align_frames(skes_joints, frames_cnt)  # aligned to the same frame length
 
-    evaluations = ['CS', 'CV']
+    #evaluations = ['CS', 'CV']
+    evaluations = ['CS']
     for evaluation in evaluations:
         split_dataset(skes_joints, label, performer, camera, evaluation, save_path)
