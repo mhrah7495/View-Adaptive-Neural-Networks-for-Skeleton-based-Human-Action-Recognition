@@ -286,9 +286,9 @@ if __name__ == '__main__':
     # get the number of total cases of certain dataset
     cases = get_cases(args.dataset)
 
-    for case in range(cases):
-        args.case = case
-        main(results)
+    #for case in range(cases):
+    args.case = 0 #only CS
+    main(results)
     np.savetxt(rootdir + '/resuult.txt', results, fmt = '%f')
 
     print(results)
