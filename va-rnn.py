@@ -99,6 +99,7 @@ def main(rootdir, case, results):
         model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
         for b in range(args.epochs):
           for i in range(38):
+            print('Epoch{} data{}'.format(b,i))
             train_x, train_y, valid_x, valid_y, test_x, test_y = get_data(args.dataset, case)
             train_x, train_y, valid_x, valid_y, test_x, test_y = train_x[1000*i:1000*(i+1)], train_y[1000*i:1000*(i+1)], valid_x, valid_y, test_x, test_y
             model.fit(train_x, train_y, validation_data=[valid_x, valid_y], epochs=1,
