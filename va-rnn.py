@@ -87,7 +87,6 @@ def main(rootdir, case, results):
     pred_dir = os.path.join(rootdir, str(case) + '_pred.txt')
 
     if args.train:
-        train_x, train_y, valid_x, valid_y, test_x, test_y = get_data(args.dataset, case)
         model = creat_model(input_shape, num_class)
         early_stop = EarlyStopping(monitor='val_acc', patience=15, mode='auto')
         reduce_lr = ReduceLROnPlateau(monitor='val_acc', factor=0.1, patience=5, mode='auto', cooldown=3., verbose=1)
@@ -100,6 +99,7 @@ def main(rootdir, case, results):
         model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
         for b in range(args.epochs):
           for i in range(38):
+            train_x, train_y, valid_x, valid_y, test_x, test_y = get_data(args.dataset, case)
             train_x, train_y, valid_x, valid_y, test_x, test_y = train_x[1000*i:1000*(i+1)], train_y[1000*i:1000*(i+1)], valid_x, valid_y, test_x, test_y
             model.fit(train_x, train_y, validation_data=[valid_x, valid_y], epochs=1,
                       batch_size=args.batch_size, callbacks=callbacks_list, verbose=2)
