@@ -79,8 +79,8 @@ def creat_model(input_shape, num_class):
 def main(rootdir, case, results):
     train_x, train_y, valid_x, valid_y, test_x, test_y = get_data(args.dataset, case)
 
-    input_shape = (train_x.shape[1], train_x.shape[2])
-    num_class = train_y.shape[1]
+    input_shape = (300, 150)
+    num_class = 60
     if not os.path.exists(rootdir):
         os.makedirs(rootdir)
     filepath = os.path.join(rootdir, str(case) + '.hdf5')
@@ -98,10 +98,10 @@ def main(rootdir, case, results):
             callbacks_list = [csv_logger, checkpoint, early_stop, reduce_lr]
         else:
             callbacks_list = [csv_logger, checkpoint]
-
-        model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
-        model.fit(train_x, train_y, validation_data=[valid_x, valid_y], epochs=args.epochs,
-                  batch_size=args.batch_size, callbacks=callbacks_list, verbose=2)
+        for i in range(38):
+          model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+          model.fit(train_x[1000*i:1000*(i+1),:,:], train_y[1000*i:1000*(i+1),:], validation_data=[valid_x, valid_y], epochs=args.epochs,
+                    batch_size=args.batch_size, callbacks=callbacks_list, verbose=2)
 
     # test
     model = creat_model(input_shape, num_class)
