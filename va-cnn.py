@@ -47,6 +47,10 @@ args.add_argument('--train', type=int, default=1,
                   help='train or test')
 args = args.parse_args()
 
+try:
+  os.mkdir('reports')
+except:
+  pass
 def main(results):
 
     num_classes = get_num_classes(args.dataset)
@@ -133,6 +137,11 @@ def main(results):
                     'monitor': args.monitor,
                     'optimizer': optimizer.state_dict(),
                 }, checkpoint)
+                csv_name='epoch{}_val{}.csv'.format(epoch+1,val_acc)
+                with open(csv_name, newline='',mode='w') as csvfile:
+                  csvwriter=csv.writer(csvfile)
+                  csvwriter.writerow(['train_loss', 'train_acc', 'val_loss', 'val_acc'])
+                  csvwriter.writerow([train_loss, train_acc, val_loss, val_acc])
                 earlystop_cnt = 0
             else:
                 print('Epoch %d: %s did not %s' % (epoch + 1, args.monitor, str_op))
