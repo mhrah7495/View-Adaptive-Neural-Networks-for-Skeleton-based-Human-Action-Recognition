@@ -32,8 +32,8 @@ args = parser.parse_args()
 
 
 import numpy as np
-import os
 import csv
+import os
 os.environ['KERAS_BACKEND'] = 'theano'
 os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu)
 from keras import initializers
@@ -81,8 +81,10 @@ def creat_model(input_shape, num_class):
     return model
 
 def main(rootdir, case, results):
-    input_shape = (300, 150)
-    num_class = 60
+    train_x, train_y, valid_x, valid_y, test_x, test_y = get_data(args.dataset, case)
+
+    input_shape = (train_x.shape[1], train_x.shape[2])
+    num_class = train_y.shape[1]
     if not os.path.exists(rootdir):
         os.makedirs(rootdir)
     filepath = os.path.join(rootdir, str(case) + '.hdf5')
@@ -90,8 +92,9 @@ def main(rootdir, case, results):
     optimizer = Adam(lr=args.lr, clipnorm=args.clip)
     pred_dir = os.path.join(rootdir, str(case) + '_pred.txt')
 
+
     if args.train:
-        #"""
+        """
         filepath = "%s/rnn-{epoch:02d}-{val_acc:.4f}.hdf5"%rootdir
         model = creat_model(input_shape, num_class)
         early_stop = EarlyStopping(monitor='val_acc', patience=15, mode='auto')
@@ -116,9 +119,28 @@ def main(rootdir, case, results):
                 data=[key]
                 data.extend(hist.history[key])
                 csv_writer.writerow(data)
-        #"""
-        
+        """
+        filepath = "%s/rnn-{epoch:02d}-{val_acc:.4f}.hdf5"%rootdir
+        model = creat_model(input_shape, num_class)
+        early_stop = EarlyStopping(monitor='val_acc', patience=15, mode='auto')
+        reduce_lr = ReduceLROnPlateau(monitor='val_acc', factor=0.1, patience=5, mode='auto', cooldown=3., verbose=1)
+        checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='auto')
+        csv_logger = CSVLogger(saveto)
+        if args.dataset=='NTU' or args.dataset == 'PKU':
+            callbacks_list = [csv_logger, checkpoint, early_stop, reduce_lr]
+        else:
+            callbacks_list = [csv_logger, checkpoint]
 
+        model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+        for e in range(args.epochs):
+          hist=model.fit(train_x, train_y, validation_data=[valid_x, valid_y], epochs=1,
+                    batch_size=args.batch_size, callbacks=callbacks_list, verbose=2)
+          with open('reports/epoch{}.csv'.format(e+1), mode='w',newline='') as csv_file:
+            csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            for key in hist.history:
+              data=[key]
+              data.extend(hist.history[key])
+              csv_writer.writerow(data)
     # test
     model = creat_model(input_shape, num_class)
     model.load_weights(filepath)
