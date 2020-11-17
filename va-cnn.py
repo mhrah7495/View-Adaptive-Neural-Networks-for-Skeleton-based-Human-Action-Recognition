@@ -120,6 +120,7 @@ def main(results):
 
             current = current.cpu()
             if monitor_op(current, best):
+                checkpoint = osp.join(output_dir, 'epoch{}_val{}_best.pth'.format(epoch+1,val_acc))
                 print('Epoch %d: %s %sd from %.4f to %.4f, '
                       'saving model to %s'
                       % (epoch + 1, args.monitor, str_op, best, current, checkpoint))
