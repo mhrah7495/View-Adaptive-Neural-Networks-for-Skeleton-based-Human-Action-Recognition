@@ -137,7 +137,7 @@ def main(results):
                     'monitor': args.monitor,
                     'optimizer': optimizer.state_dict(),
                 }, checkpoint)
-                csv_name='epoch{}_val{}.csv'.format(epoch+1,val_acc)
+                csv_name='reports/epoch{}_val{}.csv'.format(epoch+1,val_acc)
                 with open(csv_name, newline='',mode='w') as csvfile:
                   csvwriter=csv.writer(csvfile)
                   csvwriter.writerow(['train_loss', 'train_acc', 'val_loss', 'val_acc'])
