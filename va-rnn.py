@@ -43,7 +43,10 @@ from keras.callbacks import EarlyStopping,CSVLogger,ReduceLROnPlateau, ModelChec
 from transform_rnn import VA, Noise,MeanOverTime, augmentaion
 from data_rnn import  get_data, get_cases, get_activation
 
-
+try:
+  os.mkdir('reports')
+except:
+  pass
 def creat_model(input_shape, num_class):
 
     init = initializers.Orthogonal(gain=args.norm)
@@ -87,6 +90,8 @@ def main(rootdir, case, results):
     pred_dir = os.path.join(rootdir, str(case) + '_pred.txt')
 
     if args.train:
+        #"""
+        filepath = "%s/rnn-{epoch:02d}-{val_accuracy:.4f}.hdf5"%rootdir
         model = creat_model(input_shape, num_class)
         early_stop = EarlyStopping(monitor='val_acc', patience=15, mode='auto')
         reduce_lr = ReduceLROnPlateau(monitor='val_acc', factor=0.1, patience=5, mode='auto', cooldown=3., verbose=1)
@@ -99,11 +104,19 @@ def main(rootdir, case, results):
         model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
         for b in range(args.epochs):
           for i in range(38):
-            print('Epoch{} data{}'.format(b,i))
+            print('Epoch{} data{}'.format(b+1,i+1))
             train_x, train_y, valid_x, valid_y, test_x, test_y = get_data(args.dataset, case)
             train_x, train_y, valid_x, valid_y, test_x, test_y = train_x[1000*i:1000*(i+1)], train_y[1000*i:1000*(i+1)], valid_x, valid_y, test_x, test_y
-            model.fit(train_x, train_y, validation_data=[valid_x, valid_y], epochs=1,
+            hist=model.fit(train_x, train_y, validation_data=[valid_x, valid_y], epochs=1,
                       batch_size=args.batch_size, callbacks=callbacks_list, verbose=2)
+            with open('reports/epoch{}-data{}.csv'.format(b+1,i+1), mode='w',newline='') as csv_file:
+              csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+              for key in hist.history:
+                data=[key]
+                data.extend(hist.history[key])
+                csv_writer.writerow(data)
+        #"""
+        
 
     # test
     model = creat_model(input_shape, num_class)
