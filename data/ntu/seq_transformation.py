@@ -7,6 +7,10 @@ import pickle
 import logging
 import h5py
 from sklearn.model_selection import train_test_split
+import argparse
+parser = argparse.ArgumentParser(description='Dataset')
+parser.add_argument('--dataset', type=str, default='CS',
+                    help='type of dataset')
 
 root_path = './'
 stat_path = osp.join(root_path, 'statistics')
@@ -232,6 +236,6 @@ if __name__ == '__main__':
     skes_joints = align_frames(skes_joints, frames_cnt)  # aligned to the same frame length
 
     #evaluations = ['CS', 'CV']
-    evaluations = ['CS']
+    evaluations = [args.dataset]
     for evaluation in evaluations:
         split_dataset(skes_joints, label, performer, camera, evaluation, save_path)
