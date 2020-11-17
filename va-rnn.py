@@ -33,6 +33,7 @@ args = parser.parse_args()
 
 import numpy as np
 import os
+import csv
 os.environ['KERAS_BACKEND'] = 'theano'
 os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu)
 from keras import initializers
@@ -91,7 +92,7 @@ def main(rootdir, case, results):
 
     if args.train:
         #"""
-        filepath = "%s/rnn-{epoch:02d}-{val_accuracy:.4f}.hdf5"%rootdir
+        filepath = "%s/rnn-{epoch:02d}-{val_acc:.4f}.hdf5"%rootdir
         model = creat_model(input_shape, num_class)
         early_stop = EarlyStopping(monitor='val_acc', patience=15, mode='auto')
         reduce_lr = ReduceLROnPlateau(monitor='val_acc', factor=0.1, patience=5, mode='auto', cooldown=3., verbose=1)
