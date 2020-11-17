@@ -150,8 +150,8 @@ class NTUDataLoaders(object):
         if self.dataset =='NTU':
             if self.case == 0:
                 self.metric = 'CS'
-            #else:
-            #   self.metric = 'CV'
+            else:
+               self.metric = 'CV'
             path = osp.join('./data/ntu', 'NTU_' + self.metric + '.h5')
 
         f = h5py.File(path, 'r')
