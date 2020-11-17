@@ -297,7 +297,7 @@ if __name__ == '__main__':
     cases = get_cases(args.dataset)
 
     #for case in range(cases):
-    args.case = 0 #only CS
+    #args.case = 0 #only CS
     main(results)
     np.savetxt(rootdir + '/resuult.txt', results, fmt = '%f')
 
