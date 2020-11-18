@@ -101,8 +101,10 @@ def main(rootdir, case, results):
         if args.snapshot=='None':
           model = creat_model(input_shape, num_class)
         else:
+          print('Loading pre-trained wights')
           model = creat_model(input_shape, num_class)
           model.load_weights(args.snapshot)
+          print('Loaded!')
         early_stop = EarlyStopping(monitor='val_acc', patience=15, mode='auto')
         reduce_lr = ReduceLROnPlateau(monitor='val_acc', factor=0.1, patience=5, mode='auto', cooldown=3., verbose=1)
         checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='auto')
