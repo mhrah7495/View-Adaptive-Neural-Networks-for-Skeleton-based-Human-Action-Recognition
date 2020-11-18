@@ -36,6 +36,7 @@ args = parser.parse_args()
 import numpy as np
 import os
 import csv
+os.environ['THEANO_FLAGS'] = 'device=cuda,force_device=True'   
 os.environ['KERAS_BACKEND'] = 'theano'
 os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu)
 from keras import initializers
