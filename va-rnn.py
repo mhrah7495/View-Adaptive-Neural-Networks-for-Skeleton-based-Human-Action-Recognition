@@ -21,6 +21,8 @@ args.add_argument('--model', type=str, default='VA',
                   help='the neural network to use')
 args.add_argument('--dataset', type=str, default='NTU',
                   help='select dataset to evlulate')
+args.add_argument('--snapshot', type=str, default='None',
+                  help='select pretrained model')
 args.add_argument('--max_epoches', type=int, default=100,
                   help='start number of epochs to run')
 args.add_argument('--lr', type=float, default=0.0001,
@@ -297,7 +299,7 @@ if __name__ == '__main__':
     cases = get_cases(args.dataset)
 
     #for case in range(cases):
-    args.case = 0 #only CS
+    #args.case = 0 #only CS
     main(results)
     np.savetxt(rootdir + '/resuult.txt', results, fmt = '%f')
 
