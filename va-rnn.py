@@ -4,6 +4,8 @@ import argparse
 parser = argparse.ArgumentParser(description='View adaptive')
 parser.add_argument('--dataset', type=str, default='NTU',
                     help='type of dataset')
+parser.add_argument('--snapshot', type=str, default='None',
+                    help='path to pretrained weights')
 parser.add_argument('--model', type=str, default='VA',
                     help='type of recurrent net (VA, basline)')
 parser.add_argument('--nhid', type=int, default=100,
@@ -44,6 +46,10 @@ from keras.callbacks import EarlyStopping,CSVLogger,ReduceLROnPlateau, ModelChec
 from transform_rnn import VA, Noise,MeanOverTime, augmentaion
 from data_rnn import  get_data, get_cases, get_activation
 
+try:
+  os.mkdir('reports')
+except:
+  pass
 
 def creat_model(input_shape, num_class):
 
@@ -92,7 +98,11 @@ def main(rootdir, case, results):
     if args.train:
 
         filepath = "%s/rnn-{epoch:02d}-{val_acc:.4f}.hdf5"%rootdir
-        model = creat_model(input_shape, num_class)
+        if args.snapshot=='None':
+          model = creat_model(input_shape, num_class)
+        else:
+          model = creat_model(input_shape, num_class)
+          model.load_weights(args.snapshot)
         early_stop = EarlyStopping(monitor='val_acc', patience=15, mode='auto')
         reduce_lr = ReduceLROnPlateau(monitor='val_acc', factor=0.1, patience=5, mode='auto', cooldown=3., verbose=1)
         checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='auto')
