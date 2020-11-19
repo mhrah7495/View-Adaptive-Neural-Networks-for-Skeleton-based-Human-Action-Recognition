@@ -45,7 +45,7 @@ args.add_argument('--monitor', type=str, default='val_acc',
                   help='quantity to monitor (default: val_acc)')
 args.add_argument('--train', type=int, default=1,
                   help='train or test')
-parser.add_argument('--model_name', type=str, default='resnet50',
+args.add_argument('--model_name', type=str, default='resnet50',
                     help='nmae of the cnn model')
 args = args.parse_args()
 
