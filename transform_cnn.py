@@ -9,7 +9,7 @@ import torchvision.models as models
 
 class VA(nn.Module):
     """The layer for transforming the skeleton to the observed viewpoints"""
-    def __init__(self,num_classes = 60):
+    def __init__(self,num_classes = 60,model_name):
         super(VA, self).__init__()
         self.num_classes = num_classes
         self.conv1 = nn.Conv2d(3, 128, kernel_size=5, stride=2,
@@ -22,7 +22,10 @@ class VA(nn.Module):
         self.relu2 = nn.ReLU(inplace=True)
         self.avepool = nn.MaxPool2d(7)
         self.fc = nn.Linear(6272, 6)
-        self.classifier = models.resnet50(pretrained=True)
+        if model_name=='resnet50:
+            self.classifier = models.resnet50(pretrained=True)
+        elif model_name=='inception_v3':
+            self.classifier = models.inception_v3(pretrained=True)
         self.init_weight()
 
     def forward(self, x1, maxmin):
