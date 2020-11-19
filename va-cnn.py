@@ -45,6 +45,8 @@ args.add_argument('--monitor', type=str, default='val_acc',
                   help='quantity to monitor (default: val_acc)')
 args.add_argument('--train', type=int, default=1,
                   help='train or test')
+parser.add_argument('--model_name', type=str, default='resnet50,
+                    help='nmae of the cnn model')
 args = args.parse_args()
 
 try:
@@ -55,12 +57,16 @@ def main(results):
 
     num_classes = get_num_classes(args.dataset)
     if args.model[0:2] == 'VA':
-        model = VA(num_classes)
+        model = VA(num_classes,args.model_name)
     else:
-        model = models.resnet50(pretrained=True)
-        num_ftrs = model.fc.in_features
-        model.fc = nn.Linear(num_ftrs, num_classes)
-
+        if args.model_name=='resnet50':
+          model = models.resnet50(pretrained=True)
+          num_ftrs = model.fc.in_features
+          model.fc = nn.Linear(num_ftrs, num_classes)
+        elif args.model_name=='inceptionv3':
+          model = models.inception_v3(pretrained=True)
+          num_ftrs = model.fc.in_features
+          model.fc = nn.Linear(num_ftrs, num_classes)
     model = model.cuda()
 
     # define loss function (criterion) and optimizer
