@@ -26,8 +26,8 @@ class VA(nn.Module):
             self.classifier = models.resnet50(pretrained=True)
         elif model_name=='resnext50_32x4d':
             self.classifier = models.resnext50_32x4d(pretrained=True)
-        elif model_name=='resnext101_32x4d':
-            self.classifier = models.resnext101_32x4d(pretrained=True)
+        elif model_name=='resnext101_32x8d':
+            self.classifier = models.resnext101_32x8d(pretrained=True)
         elif model_name=='wide_resnet50_2':
             self.classifier = models.wide_resnet50_2(pretrained=True)
         elif model_name=='wide_resnet101_2':
