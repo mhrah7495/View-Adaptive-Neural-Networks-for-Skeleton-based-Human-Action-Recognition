@@ -47,6 +47,8 @@ args.add_argument('--train', type=int, default=1,
                   help='train or test')
 args.add_argument('--model_name', type=str, default='resnet50',
                     help='nmae of the cnn model')
+args.add_argument('--snapshot', type=str, default='None',
+                    help='path to the pretrained model')
 args = args.parse_args()
 
 try:
@@ -58,15 +60,21 @@ def main(results):
     num_classes = get_num_classes(args.dataset)
     if args.model[0:2] == 'VA':
         model = VA(num_classes,args.model_name)
+        if args.snapshot!='None':
+          model.load_state_dict(torch.load(args.snapshot))
     else:
         if args.model_name=='resnet50':
           model = models.resnet50(pretrained=True)
           num_ftrs = model.fc.in_features
           model.fc = nn.Linear(num_ftrs, num_classes)
+          if args.snapshot!='None':
+            model.load_state_dict(torch.load(args.snapshot))
         elif args.model_name=='resnext50_32x4d':
           model = models.resnext50_32x4d(pretrained=True)
           num_ftrs = model.fc.in_features
           model.fc = nn.Linear(num_ftrs, num_classes)
+          if args.snapshot!='None':
+            model.load_state_dict(torch.load(args.snapshot))
     model = model.cuda()
 
     # define loss function (criterion) and optimizer
