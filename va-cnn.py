@@ -63,8 +63,8 @@ def main(results):
           model = models.resnet50(pretrained=True)
           num_ftrs = model.fc.in_features
           model.fc = nn.Linear(num_ftrs, num_classes)
-        elif args.model_name=='inceptionv3':
-          model = models.inception_v3(pretrained=True)
+        elif args.model_name=='resnext50_32x4d':
+          model = models.resnext50_32x4d(pretrained=True)
           num_ftrs = model.fc.in_features
           model.fc = nn.Linear(num_ftrs, num_classes)
     model = model.cuda()
