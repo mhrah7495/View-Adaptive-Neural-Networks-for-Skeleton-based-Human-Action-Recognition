@@ -24,8 +24,22 @@ class VA(nn.Module):
         self.fc = nn.Linear(6272, 6)
         if model_name=='resnet50':
             self.classifier = models.resnet50(pretrained=True)
-        elif model_name=='inception_v3':
-            self.classifier = models.inception_v3(pretrained=True)
+        elif model_name=='resnext50_32x4d':
+            self.classifier = models.resnext50_32x4d(pretrained=True)
+        elif model_name=='resnext101_32x4d':
+            self.classifier = models.resnext101_32x4d(pretrained=True)
+        elif model_name=='wide_resnet50_2':
+            self.classifier = models.wide_resnet50_2(pretrained=True)
+        elif model_name=='wide_resnet101_2':
+            self.classifier = models.wide_resnet101_2(pretrained=True)
+            
+        total_params = 0
+        for nname, pparameter in self.classifier.named_parameters():
+            if not pparameter.requires_grad: continue
+            param = pparameter.numel()
+            total_params+=param
+        print(f"Total Trainable Params: {total_params}")
+        
         self.init_weight()
 
     def forward(self, x1, maxmin):
