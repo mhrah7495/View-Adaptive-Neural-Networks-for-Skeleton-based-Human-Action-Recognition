@@ -61,20 +61,20 @@ def main(results):
     if args.model[0:2] == 'VA':
         model = VA(num_classes,args.model_name)
         if args.snapshot!='None':
-          model.load_state_dict(torch.load(args.snapshot))
+          model.load_state_dict(torch.load(args.snapshot)['state_dict'], strict=False)
     else:
         if args.model_name=='resnet50':
           model = models.resnet50(pretrained=True)
           num_ftrs = model.fc.in_features
           model.fc = nn.Linear(num_ftrs, num_classes)
           if args.snapshot!='None':
-            model.load_state_dict(torch.load(args.snapshot))
+            model.load_state_dict(torch.load(args.snapshot)['state_dict'], strict=False)
         elif args.model_name=='resnext50_32x4d':
           model = models.resnext50_32x4d(pretrained=True)
           num_ftrs = model.fc.in_features
           model.fc = nn.Linear(num_ftrs, num_classes)
           if args.snapshot!='None':
-            model.load_state_dict(torch.load(args.snapshot))
+            model.load_state_dict(torch.load(args.snapshot)['state_dict'], strict=False)
     model = model.cuda()
 
     # define loss function (criterion) and optimizer
