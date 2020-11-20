@@ -154,7 +154,7 @@ def main(results):
                 earlystop_cnt += 1
             scheduler.step(current)
             if args.dataset == 'NTU' or args.dataset =='PKU':
-                if earlystop_cnt > 7:
+                if earlystop_cnt > 15:
                     print('Epoch %d: early stopping' % (epoch + 1))
                     break
             else:
