@@ -118,10 +118,10 @@ def main(results):
           model = pretrainedmodels.xception(num_classes=1000, pretrained='imagenet')
           num_ftrs = 2048
           model.fc = nn.Linear(num_ftrs, num_classes) 
-        if args.snapshot!='None':
-          print('Loading pre-trained weights')
-          model.load_state_dict(torch.load(args.snapshot)['state_dict'], strict=False)
-          print('Loaded')
+    if args.snapshot!='None':
+      print('Loading pre-trained weights')
+      model.load_state_dict(torch.load(args.snapshot)['state_dict'], strict=False)
+      print('Loaded')
     model = model.cuda()
 
     # define loss function (criterion) and optimizer
