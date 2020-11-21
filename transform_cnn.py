@@ -33,8 +33,6 @@ class VA(nn.Module):
             self.classifier = models.wide_resnet50_2(pretrained=True)
         elif model_name=='wide_resnet101_2':
             self.classifier = models.wide_resnet101_2(pretrained=True)
-        elif model_name=='eff':
-            self.classifier = efficientnet_pytorch.EfficientNet.from_pretrained('efficientnet-b0')
         total_params = 0
         for nname, pparameter in self.classifier.named_parameters():
             if not pparameter.requires_grad: continue
