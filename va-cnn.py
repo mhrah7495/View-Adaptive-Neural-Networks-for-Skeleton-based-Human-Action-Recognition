@@ -15,6 +15,8 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 import torchvision.models as models
 from transform_cnn import VA
 from data_cnn import NTUDataLoaders, AverageMeter,  make_dir, get_cases, get_num_classes
+import efficientnet_pytorch
+from efficientnet_pytorch import EfficientNet
 
 args = argparse.ArgumentParser(description='View adaptive')
 args.add_argument('--model', type=str, default='VA',
@@ -67,14 +69,52 @@ def main(results):
           model = models.resnet50(pretrained=True)
           num_ftrs = model.fc.in_features
           model.fc = nn.Linear(num_ftrs, num_classes)
-          if args.snapshot!='None':
-            model.load_state_dict(torch.load(args.snapshot)['state_dict'], strict=False)
         elif args.model_name=='resnext50_32x4d':
           model = models.resnext50_32x4d(pretrained=True)
           num_ftrs = model.fc.in_features
           model.fc = nn.Linear(num_ftrs, num_classes)
-          if args.snapshot!='None':
-            model.load_state_dict(torch.load(args.snapshot)['state_dict'], strict=False)
+        elif args.model_name=='resnext101_32x8d':
+          model = models.resnext101_32x8d(pretrained=True)
+          num_ftrs = model.fc.in_features
+          model.fc = nn.Linear(num_ftrs, num_classes)
+        elif args.model_name=='resnext101_32x8d':
+          model = models.resnext101_32x8d(pretrained=True)
+          num_ftrs = model.fc.in_features
+          model.fc = nn.Linear(num_ftrs, num_classes)
+        elif args.model_name=='efficientnetb0':
+          model = efficientnet_pytorch.EfficientNet.from_pretrained('efficientnet-b0')
+          num_ftrs = 1280
+          model.fc = nn.Linear(num_ftrs, num_classes)
+        elif args.model_name=='efficientnetb1':
+          model = efficientnet_pytorch.EfficientNet.from_pretrained('efficientnet-b1')
+          num_ftrs = 1280
+          model.fc = nn.Linear(num_ftrs, num_classes)
+        elif args.model_name=='efficientnetb2':
+          model = efficientnet_pytorch.EfficientNet.from_pretrained('efficientnet-b2')
+          num_ftrs = 1408
+          model.fc = nn.Linear(num_ftrs, num_classes)
+        elif args.model_name=='efficientnetb3':
+          model = efficientnet_pytorch.EfficientNet.from_pretrained('efficientnet-b3')
+          num_ftrs = 1536
+          model.fc = nn.Linear(num_ftrs, num_classes)
+        elif args.model_name=='efficientnetb4':
+          model = efficientnet_pytorch.EfficientNet.from_pretrained('efficientnet-b4')
+          num_ftrs = 1792
+          model.fc = nn.Linear(num_ftrs, num_classes) 
+        elif args.model_name=='efficientnetb5':
+          model = efficientnet_pytorch.EfficientNet.from_pretrained('efficientnet-b5')
+          num_ftrs = 2048
+          model.fc = nn.Linear(num_ftrs, num_classes) 
+        elif args.model_name=='efficientnetb6':
+          model = efficientnet_pytorch.EfficientNet.from_pretrained('efficientnet-b6')
+          num_ftrs = 2304
+          model.fc = nn.Linear(num_ftrs, num_classes) 
+        elif args.model_name=='densenet201':
+          model = models.densenet201(pretrained=True)
+          num_ftrs = 1920
+          model.fc = nn.Linear(num_ftrs, num_classes) 
+        if args.snapshot!='None':
+          model.load_state_dict(torch.load(args.snapshot)['state_dict'], strict=False)
     model = model.cuda()
 
     # define loss function (criterion) and optimizer
