@@ -17,6 +17,7 @@ from transform_cnn import VA
 from data_cnn import NTUDataLoaders, AverageMeter,  make_dir, get_cases, get_num_classes
 import efficientnet_pytorch
 from efficientnet_pytorch import EfficientNet
+import pretrainedmodels
 
 args = argparse.ArgumentParser(description='View adaptive')
 args.add_argument('--model', type=str, default='VA',
@@ -113,8 +114,14 @@ def main(results):
           model = models.densenet201(pretrained=True)
           num_ftrs = 1920
           model.fc = nn.Linear(num_ftrs, num_classes) 
+        elif args.model_name=='xception':
+          model = pretrainedmodels.xception(num_classes=1000, pretrained='imagenet')
+          num_ftrs = 2048
+          model.fc = nn.Linear(num_ftrs, num_classes) 
         if args.snapshot!='None':
+          print('Loading pre-trained weights')
           model.load_state_dict(torch.load(args.snapshot)['state_dict'], strict=False)
+          print('Loaded')
     model = model.cuda()
 
     # define loss function (criterion) and optimizer
